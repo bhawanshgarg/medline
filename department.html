@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Departments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #e8f5f5;
+            color: #333;
+            background-image: 
+                radial-gradient(circle at 20px 20px, rgba(0, 255, 255, 0.1) 2px, transparent 0),
+                radial-gradient(circle at 40px 40px, rgba(0, 255, 255, 0.1) 2px, transparent 0);
+            background-size: 50px 50px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #009688, #00bcd4);
+            color: white;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, transparent 20%, rgba(255, 255, 255, 0.1) 20%, rgba(255, 255, 255, 0.1) 40%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0.1) 80%, transparent 80%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .department-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.15);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border: 1px solid rgba(0, 188, 212, 0.1);
+        }
+
+        .department-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 188, 212, 0.25);
+            border-color: #00bcd4;
+        }
+
+        .department-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            border-bottom: 3px solid #009688;
+        }
+
+        .department-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            background: linear-gradient(to bottom, #ffffff 0%, #f9ffff 100%);
+        }
+
+        .department-card h2 {
+            color: #009688;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(0, 188, 212, 0.2);
+            position: relative;
+        }
+
+        .department-card h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background-color: #00bcd4;
+            transition: width 0.3s ease;
+        }
+
+        .department-card:hover h2::after {
+            width: 100px;
+        }
+
+        .department-card p {
+            color: #546e7a;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+            flex-grow: 1;
+            line-height: 1.7;
+        }
+
+        .learn-more-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(45deg, #009688, #00bcd4);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: auto;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0, 188, 212, 0.2);
+        }
+
+        .learn-more-btn:hover {
+            background: linear-gradient(45deg, #00bcd4, #009688);
+            box-shadow: 0 4px 10px rgba(0, 188, 212, 0.4);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .departments-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                padding: 1rem;
+                gap: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .department-card h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.75rem;
+            }
+
+            .card-content {
+                padding: 1rem;
+            }
+
+            .learn-more-btn {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Add subtle animation for cards appearance */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .department-card {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Stagger the animation for each card */
+        .department-card:nth-child(n) {
+            animation-delay: calc(0.1s * var(--order));
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Our Hospital Departments</h1>
+    </header>
+
+    <main class="departments-grid">
+        <!-- Cardiology -->
+        <article class="department-card" style="--order: 1;">
+            <img src="image/cardiology%20-%20Copy.jpg" alt="Cardiology Department" loading="lazy">
+            <div class="card-content">
+                <h2>Cardiology</h2>
+                <p>Our Cardiology Department specializes in heart-related conditions, providing advanced diagnostics, treatments, and surgeries. Our team of expert cardiologists uses the latest technology to treat heart diseases, including heart attacks, arrhythmias, and heart failure.</p>
+                <button class="learn-more-btn">Learn More</button>
+            </div>
+        </article>
+
+        <!-- Neurology -->
+        <article class="department-card" style="--order: 2;">
+            <img src="image/neuro.jpg" alt="Neurology Department" loading="lazy">
+            <div class="card-content">
+                <h2>Neurology</h2>
+                <p>The Neurology Department is dedicated to treating disorders of the nervous system, including strokes, epilepsy, Parkinson's disease, and more. Our neurologists offer both diagnostic and therapeutic services using state-of-the-art equipment.</p>
+                <button class="learn-more-btn">Learn More</button>
+            </div>
+        </article>
+
+        <!-- Pediatrics -->
+        <article class="department-card" style="--order: 3;">
+            <img src="image/pediatrics.jpg" alt="Pediatrics Department" loading="lazy">
+            <div class="card-content">
+                <h2>Pediatrics</h2>
+                <p>The Pediatrics Department is committed to providing compassionate care to children, from infancy through adolescence. We offer general pediatric care, immunizations, and treatments for childhood diseases.</p>
+                <button class="learn-more-btn">Learn More</button>
+            </div>
+        </article>
+
+        <!-- Orthopedics -->
+        <article class="department-card" style="--order: 4;">
+            <img src="image/ortho.jpg" alt="Orthopedics Department" loading="lazy">
+            <div class="card-content">
+                <h2>Orthopedics</h2>
+                <p>Our Orthopedics Department provides care for musculoskeletal injuries and conditions, including fractures, joint replacement, and spine surgery. We aim to help patients recover mobility and improve their quality of life.</p>
+                <button class="learn-more-btn">Learn More</button>
+            </div>
+        </article>
+
+        <!-- Dermatology -->
+        <article class="department-card" style="--order: 5;">
+            <img src="image/dermatology.jpg" alt="Dermatology Department" loading="lazy">
+            <div class="card-content">
+                <h2>Dermatology</h2>
+                <p>Our Dermatology Department specializes in diagnosing and treating skin conditions such as acne, eczema, psoriasis, and skin cancer. Our dermatologists provide both medical and cosmetic treatments to improve skin health.</p>
+                <button class="learn-more-btn">Learn More</button>
+            </div>
+        </article>
+
+        <!-- General Surgery -->
+        <article class="department-card" style="--order: 6;">
+            <img src="image/surgery.jpg" alt="General Surgery Department" loading="lazy">
+            <div class="card-content">
+                <h2>General Surgery</h2>
+                <p>Our General Surgery Department provides a wide range of surgical services, from minimally invasive procedures to complex surgeries. We focus on patient recovery and offer state-of-the-art surgical techniques.</p>
+                <button class="learn-more-btn">Learn More</button>
+            </div>
+        </article>
+
+        
+            <!-- Oncology -->
+            <article class="department-card" style="--order: 7;">
+                <img src="image/on.jpg" alt="Oncology Department" loading="lazy">
+                <div class="card-content">
+                    <h2>Oncology</h2>
+                    <p>Our Oncology Department specializes in cancer diagnosis and treatment, including chemotherapy, radiation therapy, and surgical oncology. Our multidisciplinary team works to provide personalized care for every patient.</p>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </article>
+        
+            <!-- Radiology -->
+            <article class="department-card" style="--order: 8;">
+                <img src="image/radiotherapy.jpg" alt="Radiology Department" loading="lazy">
+                <div class="card-content">
+                    <h2>Radiology</h2>
+                    <p>The Radiology Department offers advanced imaging services such as MRI, CT scans, X-rays, and ultrasounds to aid in accurate diagnosis and treatment planning.</p>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </article>
+        
+            <!-- Urology -->
+            <article class="department-card" style="--order: 9;">
+                <img src="image/urology.jpg" alt="Urology Department" loading="lazy">
+                <div class="card-content">
+                    <h2>Urology</h2>
+                    <p>Our Urology Department provides expert care for urinary tract and male reproductive system issues, including kidney stones, prostate problems, and urological cancers.</p>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </article>
+        
+            <!-- Ophthalmology -->
+            <article class="department-card" style="--order: 10;">
+                <img src="image/op.jpg" alt="Ophthalmology Department" loading="lazy">
+                <div class="card-content">
+                    <h2>Ophthalmology</h2>
+                    <p>The Ophthalmology Department focuses on eye health, offering treatments for cataracts, glaucoma, macular degeneration, and corrective eye surgeries.</p>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </article>
+        
+            <!-- Psychiatry -->
+            <article class="department-card" style="--order: 11;">
+                <img src="image/psychiatry.jpg" alt="Psychiatry Department" loading="lazy">
+                <div class="card-content">
+                    <h2>Psychiatry</h2>
+                    <p>Our Psychiatry Department is committed to mental health care, offering therapy and treatment for conditions such as anxiety, depression, and bipolar disorder.</p>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </article>
+        
+            <!-- Gastroenterology -->
+            <article class="department-card" style="--order: 12;">
+                <img src="image/gastro%20-%20Copy.jpg" alt="Gastroenterology Department" loading="lazy">
+                <div class="card-content">
+                    <h2>Gastroenterology</h2>
+                    <p>The Gastroenterology Department provides care for digestive system disorders, including conditions like GERD, ulcers, and liver diseases.</p>
+                    <button class="learn-more-btn">Learn More</button>
+                </div>
+            </article>
+            <!-- Surgery -->
+             <article class="department-card" style="--order: 13;">
+            <img src="image/surgery.jpg" alt="Surgery Department" loading="lazy">
+            <div class="card-content">
+                <h2>Surgery</h2>
+               <p>The Surgery Department provides expertise in performing a wide range of surgeries, including emergency, trauma, and elective procedures, with a focus on patient safety and recovery.</p>
+               <button class="learn-more-btn">Learn More</button>
+            </div>
+            </article>
+
+<!-- Pulmonary -->
+<article class="department-card" style="--order: 14;">
+    <img src="image/pulmonology.jpg" alt="Pulmonary Department" loading="lazy">
+    <div class="card-content">
+        <h2>Pulmonary</h2>
+        <p>Our Pulmonary Department is dedicated to diagnosing and treating lung and respiratory disorders such as asthma, COPD, pneumonia, and sleep apnea, using cutting-edge technology.</p>
+        <button class="learn-more-btn">Learn More</button>
+    </div>
+</article>
+
+<!-- Gynecology -->
+<article class="department-card" style="--order: 15;">
+    <img src="image/gynecologist%20-%20Copy.jpg" alt="Gynecology Department" loading="lazy">
+    <div class="card-content">
+        <h2>Gynecology</h2>
+        <p>The Gynecology Department offers comprehensive care for women's health, including reproductive system disorders, prenatal care, and menopause management.</p>
+        <button class="learn-more-btn">Learn More</button>
+    </div>
+</article>
+
+<!-- Immunology -->
+<article class="department-card" style="--order: 16;">
+    <img src="image/immunology.jpg" alt="Immunology Department" loading="lazy">
+    <div class="card-content">
+        <h2>Immunology</h2>
+        <p>The Immunology Department specializes in diagnosing and treating immune system disorders, including allergies, autoimmune diseases, and immunodeficiency conditions.</p>
+        <button class="learn-more-btn">Learn More</button>
+    </div>
+</article>
+
+<!-- Hepatology -->
+<article class="department-card" style="--order: 17;">
+    <img src="image/hepatology.jpg" alt="Hepatology Department" loading="lazy">
+    <div class="card-content">
+        <h2>Hepatology</h2>
+        <p>Our Hepatology Department provides advanced care for liver-related conditions, such as hepatitis, cirrhosis, and liver cancer, with state-of-the-art diagnostic and treatment facilities.</p>
+        <button class="learn-more-btn">Learn More</button>
+    </div>
+</article>
+
+<!-- Geriatrics -->
+<article class="department-card" style="--order: 18;">
+    <img src="image/geriatrics.jpg" alt="Geriatrics Department" loading="lazy">
+    <div class="card-content">
+        <h2>Geriatrics</h2>
+        <p>The Geriatrics Department focuses on the unique health needs of older adults, offering services for age-related conditions, memory care, and mobility support.</p>
+        <button class="learn-more-btn">Learn More</button>
+    </div>
+</article>
+
+<!-- Medicine -->
+<article class="department-card" style="--order: 19;">
+    <img src="image/medicine.jpg" alt="Medicine Department" loading="lazy">
+    <div class="card-content">
+        <h2>Medicine</h2>
+        <p>The Medicine Department provides primary and specialty care for various conditions, focusing on accurate diagnosis, treatment, and patient-centered care.</p>
+        <button class="learn-more-btn">Learn More</button>
+    </div>
+</article>
+<!-- Allergology -->
+<article class="department-card" style="--order: 20;">
+    <img src="image/allergology.jpg" alt="Allergology Department" loading="lazy">
+    <div class="card-content">
+        <h2>Allergology</h2>
+        <p>The Allergology Department specializes in diagnosing and treating allergic conditions such as hay fever, food allergies, drug allergies, and eczema, using advanced testing and treatment options.</p>
+        <button class="learn-more-btn">Learn More</button>
+    </div>
+</article>
+
+<!-- Anesthesiology -->
+<article class="department-card" style="--order: 21;">
+    <img src="image/anesthateist%20-%20Copy.jpg" alt="Anesthesiology Department" loading="lazy">
+    <div class="card-content">
+        <h2>Anesthesiology</h2>
+        <p>The Anesthesiology Department provides expert care in pain management and anesthesia for surgical and diagnostic procedures, ensuring patient safety and comfort during operations.</p>
+        <button class="learn-more-btn">Learn More</button>
+    </div>
+</article>
+
+
+        </main>
+        
+    </main>
+</body>
+</html>
